@@ -4,6 +4,7 @@ pygame>=2.5.0
 matplotlib>=3.7.0
 
 # GPU acceleration (CUDA 12.x - adjust for your CUDA version)
+# CUDA 13.x: cupy-cuda13x>=13.6.0
 # CUDA 12.x (RTX 30/40 series): cupy-cuda12x>=13.0.0
 # CUDA 11.x: cupy-cuda11x>=13.0.0
 # CPU fallback (no GPU): cupy-cuda12x (works without CUDA, slower)
