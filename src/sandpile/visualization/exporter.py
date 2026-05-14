@@ -35,8 +35,9 @@ class FrameExporter:
         Returns:
             Path to saved image
         """
+        import matplotlib
+        matplotlib.use('Agg')
         import matplotlib.pyplot as plt
-        from matplotlib.cm import get_cmap
 
         if grid is None:
             grid = self.engine.get_grid_cpu()
@@ -44,6 +45,7 @@ class FrameExporter:
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.imshow(grid, cmap='YlOrRd', vmin=0, vmax=3, interpolation='nearest')
         ax.axis('off')
+        plt.tight_layout(pad=0)
 
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -150,21 +152,29 @@ class VideoExporter:
         if grid is None:
             grid = self.engine.get_grid_cpu()
 
-        # Render with matplotlib to get nice colors
+        # Render with matplotlib (Agg backend for headless)
+        import matplotlib
+        matplotlib.use('Agg')  # Ensure non-interactive backend
         import matplotlib.pyplot as plt
-        from matplotlib.cm import get_cmap
+        import io
 
         fig, ax = plt.subplots(figsize=(self.width/100, self.height/100), dpi=100)
         ax.imshow(grid, cmap='YlOrRd', vmin=0, vmax=3, interpolation='nearest')
         ax.axis('off')
-        fig.canvas.draw()
+        plt.tight_layout(pad=0)
 
-        # Convert to RGB array
-        image = np.frombuffer(fig.canvas.tostring_rgb(), dtype='uint8')
-        image = image.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+        # Save to in-memory PNG buffer
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=100, bbox_inches='tight', pad_inches=0)
         plt.close(fig)
 
-        # Resize to target dimensions if needed
+        # Read PNG and convert to RGB array
+        buf.seek(0)
+        from PIL import Image
+        img = Image.open(buf).convert('RGB')
+        image = np.array(img)
+
+        # Resize if needed
         if image.shape[:2] != (self.height, self.width):
             import cv2
             image = cv2.resize(image, (self.width, self.height),
