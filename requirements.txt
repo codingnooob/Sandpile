@@ -1,0 +1,18 @@
+sandpile>=1.0.0
+
+# Core dependencies
+numpy>=1.24.0
+# Note: CuPy installation depends on CUDA version:
+#   CUDA 12.x: pip install cupy-cuda12x
+#   CUDA 11.x: pip install cupy-cuda11x
+#   For Windows with no CUDA, use: pip install cupy-cuda12x (includes CPU fallback)
+pygame>=2.5.0
+matplotlib>=3.7.0
+
+# Optional: video export
+opencv-python>=4.8.0; sys_platform != 'win32'
+
+# Development dependencies
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0

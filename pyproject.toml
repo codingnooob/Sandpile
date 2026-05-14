@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sandpile"
+version = "1.0.0"
+description = "High-fidelity GPU-accelerated Abelian Sandpile Model simulation"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Developer", email = "dev@example.com"}
+]
+keywords = ["sandpile", "soc", "self-organized-criticality", "cupy", "pygame", "simulation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "cupy-cuda12x>=13.0.0; platform_system!='Windows'",
+    "cupy-cuda11x>=13.0.0; platform_system!='Windows'",
+    "pygame>=2.5.0",
+    "matplotlib>=3.7.0",
+    "opencv-python>=4.8.0; extra == 'video'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+video = ["opencv-python>=4.8.0"]
+docs = ["sphinx>=7.0.0", "sphinx-rtd-theme>=1.3.0"]
+
+[project.scripts]
+sandpile = "sandpile.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+[tool.mypy]
+python_version = 3.9
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
