@@ -51,3 +51,10 @@ htmlcov/
 
 # CuPy cache
 .cupy/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python virtual environment
+venv/
+.env/
