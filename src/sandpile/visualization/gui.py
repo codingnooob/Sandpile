@@ -297,4 +297,4 @@ class SandpileGUI:
                 print(f"  Frame {i}/{frames}")
 
         out.release()
-        print(f"✓ Video saved to {output_path}")
+        print(f"[OK] Video saved to {output_path}")

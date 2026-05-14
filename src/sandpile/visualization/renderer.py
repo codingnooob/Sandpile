@@ -329,7 +329,7 @@ class Renderer:
         # Render without UI overlays for clean image
         self._render_grid()
         pygame.image.save(self.screen, filename)
-        print(f"✓ Exported {filename}")
+        print(f"[OK] Exported {filename}")
 
     def tick(self):
         """Maintain consistent frame rate."""

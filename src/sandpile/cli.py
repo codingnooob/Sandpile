@@ -157,7 +157,7 @@ def run_benchmark():
 
             mean_time = np.mean(times)
             std_time = np.std(times)
-            print(f"  Stabilization: {mean_time*1000:.2f} ± {std_time*1000:.2f} ms")
+            print(f"  Stabilization: {mean_time*1000:.2f} (+/-{std_time*1000:.2f}) ms")
 
             # Benchmark: continuous rain (10 drops)
             engine.clear()
@@ -203,7 +203,7 @@ def run_video_export(output: str, frames: int, size: str, use_gpu: bool):
         engine.deposit_random(grains=5, count=1)
 
     exporter.capture_and_write_realtime(frames, deposit_step)
-    print(f"\n✓ Video export complete: {output}")
+    print(f"\n[OK] Video export complete: {output}")
 
 
 if __name__ == '__main__':

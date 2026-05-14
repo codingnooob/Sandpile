@@ -57,4 +57,4 @@ htmlcov/
 
 # Python virtual environment
 venv/
-.env/
+.venv/

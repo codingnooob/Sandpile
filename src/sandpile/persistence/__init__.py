@@ -78,7 +78,7 @@ class StateManager:
         else:
             np.savez(filepath, **save_dict)
 
-        print(f"✓ Saved state to {filepath} ({filepath.stat().st_size / 1024:.1f} KB)")
+        print(f"[OK] Saved state to {filepath} ({filepath.stat().st_size / 1024:.1f} KB)")
         return str(filepath)
 
     def load(self, filename: str) -> bool:
@@ -96,7 +96,7 @@ class StateManager:
             filepath = self.storage_dir / filename
 
         if not filepath.exists():
-            print(f"✗ File not found: {filepath}")
+            print(f"[FAIL] File not found: {filepath}")
             return False
 
         try:
@@ -122,14 +122,14 @@ class StateManager:
             # Print metadata if available
             if 'metadata_json' in data:
                 meta = json.loads(str(data['metadata_json']))
-                print(f"✓ Loaded state from {filepath.name}")
+                print(f"[OK] Loaded state from {filepath.name}")
                 print(f"  Saved: {meta.get('saved_at', 'unknown')}")
                 print(f"  Avalanches: {meta.get('avalanche_count', 'N/A')}")
 
             return True
 
         except Exception as e:
-            print(f"✗ Failed to load {filepath}: {e}")
+            print(f"[FAIL] Failed to load {filepath}: {e}")
             return False
 
     def list_saved(self) -> list:
@@ -158,6 +158,27 @@ class StateManager:
                 continue
         return states
 
+    def load_last(self) -> bool:
+        """
+        Load the most recently saved state file.
+
+        Returns:
+            True if load succeeded, False if no saved states exist
+        """
+        states = self.list_saved()
+        if not states:
+            print("No saved states found")
+            return False
+
+        # Sort by modification time (most recent first)
+        states_sorted = sorted(
+            states,
+            key=lambda s: (self.storage_dir / s['filename']).stat().st_mtime,
+            reverse=True
+        )
+        last = states_sorted[0]
+        return self.load(last['filename'])
+
     def delete(self, filename: str) -> bool:
         """
         Delete a saved state file.
@@ -171,7 +192,7 @@ class StateManager:
         filepath = self.storage_dir / filename
         if filepath.exists():
             filepath.unlink()
-            print(f"✓ Deleted {filename}")
+            print(f"[OK] Deleted {filename}")
             return True
         return False
 
@@ -189,4 +210,4 @@ class StateManager:
         )
         for f in files[keep_count:]:
             f.unlink()
-        print(f"✓ Cleaned up, kept {min(keep_count, len(files))} most recent states")
+        print(f"[OK] Cleaned up, kept {min(keep_count, len(files))} most recent states")
